@@ -19,13 +19,18 @@ class RestaurantsController < ApplicationController
   def create
     @restaurant = Restaurant.new(restaurant_params)
     if @restaurant.save
-      redirect_to('#')
+      redirect_to restaurant_path(@restaurant)
     else
-      render('/restaurants/new')
+      render :new
     end
   end
 
   def update
+    if @restaurant.update(restaurant_params)
+      redirect_to restaurant_path(@restaurant)
+    else
+      render :edit
+    end
   end
 
   def destroy
@@ -36,6 +41,6 @@ class RestaurantsController < ApplicationController
   def restaurant_params
     # *Strong params*: You need to *whitelist* what can be updated by the user
     # Never trust user data!
-    params.require(:restaurant).permit(:name, :address)
+    params.require(:restaurant).permit(:name, :address, :phone_number, :category)
   end
 end
